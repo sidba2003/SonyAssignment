@@ -133,7 +133,7 @@ class Evaluator:
 
     @classmethod
     def expression_evaluator(cls, expression: str) -> int:
-        """takes a string expressions and returns the evaluated result
+        """takes a string expression and returns the evaluated result
 
         Args:
             expression (string): expression to be evaluated
@@ -176,10 +176,7 @@ class Evaluator:
                 case ')':
                     pre_evaluated_number, _ = characters_stack.pop(), characters_stack.pop()
                     characters_stack.append(cls.computed_value(characters_stack, pre_evaluated_number))
-                # in the case we have an integer...
-                # if the list is currently empty  or if the last seen character was an opening bracket then we add the integer and move on
-                # else we can safely assume we have an operater and another number before this...
-                # so we pop both of these off, carry out the correct computation and append the result onto the stack
+                # in the case we have an integer
                 case _:
                     characters_stack.append(cls.computed_value(characters_stack, character))
         
