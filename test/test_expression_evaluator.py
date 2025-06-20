@@ -26,6 +26,10 @@ class TestExpressionEvaluator(unittest.TestCase):
         self.assertEqual(Evaluator.expression_evaluator('(1 + (6 / 3 + 2) / 5) * (2 * (1 * 5))'), 10)
     
     
+    def test_non_string_expression(self):
+        self.assertEqual(Evaluator.expression_evaluator((1 + (6 / 3 + 2) / 5) * (2 * (1 * 5))), None)
+    
+    
     def test_float_answer(self):
         self.assertEqual(Evaluator.expression_evaluator('3 * (5 / 2)'), 7.5)
     

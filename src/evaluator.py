@@ -142,6 +142,9 @@ class Evaluator:
             expression (string): expression to be evaluated
         """
         
+        if type(expression) != str:
+            return None
+        
         # converting the string expression to an array based on if a character != ' ' (we basically ignore all the whitespaces)
         expression = Evaluator.get_parsed_expression(expression)
         
