@@ -26,6 +26,10 @@ class TestExpressionEvaluator(unittest.TestCase):
         self.assertEqual(Evaluator.expression_evaluator('(1 + (6 / 3 + 2) / 5) * (2 * (1 * 5))'), 10)
     
     
+    def test_empty_expression(self):
+        self.assertEqual(Evaluator.expression_evaluator(''), None)
+    
+    
     def test_invalidity_for_number_greater_than_9(self):
         self.assertEqual(Evaluator.expression_evaluator('4 + (12 / (1 * 2))'), None)
     
