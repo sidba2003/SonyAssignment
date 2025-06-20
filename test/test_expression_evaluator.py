@@ -34,6 +34,10 @@ class TestExpressionEvaluator(unittest.TestCase):
         self.assertEqual(Evaluator.expression_evaluator('1 % 4'), None)
     
     
+    def test_invalid_character_consecutively(self):
+        self.assertEqual(Evaluator.expression_evaluator('1 %^& 6'), None)
+    
+    
     def test_empty_expression(self):
         self.assertEqual(Evaluator.expression_evaluator(''), None)
     
