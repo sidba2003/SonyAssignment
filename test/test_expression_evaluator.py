@@ -30,6 +30,10 @@ class TestExpressionEvaluator(unittest.TestCase):
         self.assertEqual(Evaluator.expression_evaluator('3 * (5 / 2)'), 7.5)
     
     
+    def test_invalid_character(self):
+        self.assertEqual(Evaluator.expression_evaluator('1 % 4'), None)
+    
+    
     def test_empty_expression(self):
         self.assertEqual(Evaluator.expression_evaluator(''), None)
     

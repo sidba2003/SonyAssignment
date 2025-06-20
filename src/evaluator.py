@@ -103,11 +103,20 @@ class Evaluator:
                     if index + 1 < len(expression):
                         if '0' <= str(expression[index + 1]) <= '9':
                             raise Exception
+        
+        
+        def check_invalid_characters():
+            for character in expression:
+                if (character not in ('(', ')') and 
+                    not '0' <= str(character) <= '9' and
+                    character not in cls.operations):
+                    raise Exception
                         
         
         check_incorrect_operator_placement()
         check_for_opening_and_closing_brackets_equality()
         check_consecutive_number_case()
+        check_invalid_characters()
         
         
     @classmethod
