@@ -104,7 +104,7 @@ class Evaluator:
                         if '0' <= str(expression[index + 1]) <= '9':
                             raise Exception
         
-        
+        # checks for the presence of illegal operators, egamples -> '$', '&', %', etc...
         def check_invalid_characters():
             for character in expression:
                 if (character not in ('(', ')') and 
