@@ -26,6 +26,14 @@ class TestExpressionEvaluator(unittest.TestCase):
         self.assertEqual(Evaluator.expression_evaluator('(1 + (6 / 3 + 2) / 5) * (2 * (1 * 5))'), 10)
     
     
+    def test_simple_negative_nested_expression_correctness(self):
+        self.assertEqual(Evaluator.expression_evaluator('(1 + -2) * -1'), 1)
+    
+    
+    def test_complex_negative_nested_expression_correctness(self):
+        self.assertEqual(Evaluator.expression_evaluator('(1 + (-6 / 3 + 2) / 1) * (-2 * (1 * 5))'), -10)
+    
+    
     def test_non_string_expression(self):
         self.assertEqual(Evaluator.expression_evaluator((1 + (6 / 3 + 2) / 5) * (2 * (1 * 5))), None)
     

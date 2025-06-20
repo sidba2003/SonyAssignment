@@ -7,8 +7,8 @@ class Evaluator:
     }
 
 
-    @staticmethod
-    def get_parsed_expression(expression: str) -> int:
+    @classmethod
+    def get_parsed_expression(cls, expression: str) -> int:
         expression_data = []
         
         index = 0
@@ -16,6 +16,12 @@ class Evaluator:
             if expression[index] == ' ':
                 index += 1
                 continue
+                
+            if (expression[index] not in ('(', ')') and 
+                not '0' <= str(expression[index]) <= '9' and
+                expression[index] not in cls.operations):
+                raise Exception
+                
             
             match expression[index]:
                 # this adds suppport for + signed expression
@@ -67,15 +73,15 @@ class Evaluator:
                     continue
                 
                 if (expression[index - 1] == ')' and
-                    (expression[index + 1] == '(' or '0' <= str(expression[index + 1]) <= '9')):
+                    (expression[index + 1] == '(' or (isinstance(expression[index + 1], int) or isinstance(expression[index + 1], float)))):
                     continue
                     
                 if (expression[index + 1] == '(' and
-                    (expression[index - 1] == ')' or '0' <= str(expression[index - 1]) <= '9')):
+                    (expression[index - 1] == ')' or (isinstance(expression[index - 1], int) or isinstance(expression[index + 1], float)))):
                     continue
                 
-                if not ('0' <= str(expression[index - 1]) <= '9' and 
-                    '0' <= str(expression[index + 1]) <= '9'):
+                if not ((isinstance(expression[index - 1], int) or isinstance(expression[index + 1], float)) and 
+                    (isinstance(expression[index + 1], int) or isinstance(expression[index + 1], float))):
                     raise Exception
         
         # this checks if each opening bracket has a closing bracket...
@@ -103,20 +109,11 @@ class Evaluator:
                     if index + 1 < len(expression):
                         if '0' <= str(expression[index + 1]) <= '9':
                             raise Exception
-        
-        
-        def check_invalid_characters():
-            for character in expression:
-                if (character not in ('(', ')') and 
-                    not '0' <= str(character) <= '9' and
-                    character not in cls.operations):
-                    raise Exception
                         
-        
+
         check_incorrect_operator_placement()
         check_for_opening_and_closing_brackets_equality()
         check_consecutive_number_case()
-        check_invalid_characters()
         
         
     @classmethod
@@ -144,18 +141,14 @@ class Evaluator:
         
         if type(expression) != str:
             return None
-        
-        # converting the string expression to an array based on if a character != ' ' (we basically ignore all the whitespaces)
-        expression = Evaluator.get_parsed_expression(expression)
-        
-        # we test the expression for validity, and if an error is raied then we return None
+
         try:
+            # converting the string expression to an array based on if a character != ' ' (we basically ignore all the whitespaces)
+            expression = cls.get_parsed_expression(expression)
+            
+            # we test the expression for validity
             cls.check_expression_validity(expression)
-        except:
-            return None
-        
-        #  if the expression passes the validity tests, then we initiate the computation
-        try:
+            
             #  certain edge cases can slip by... such as division by 0 or empty brackets (altough empty brackets will throw an error and None will be returned)
             result = Evaluator.evaluate_expression(expression)
             return result
