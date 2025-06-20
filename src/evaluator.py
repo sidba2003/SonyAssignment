@@ -136,7 +136,7 @@ class Evaluator:
 
     @classmethod
     def expression_evaluator(cls, expression: str) -> int:
-        """takes a string expressions and returns the evaluated result
+        """takes a string expression and returns the evaluated result
 
         Args:
             expression (string): expression to be evaluated
