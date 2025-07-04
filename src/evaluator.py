@@ -16,39 +16,55 @@ class Evaluator:
             if expression[index] == ' ':
                 index += 1
                 continue
-                
-            if (expression[index] not in ('(', ')') and 
-                not '0' <= str(expression[index]) <= '9' and
-                expression[index] not in cls.operations):
-                raise Exception
-                
             
             match expression[index]:
                 # this adds suppport for + signed expression
                 case '+':
-                    # if the next character is a string representation of an integer than we assume this is a signed integer
+                    # if the next character is a string representation of an integer than we assume this is a signed integer and we parse to the end of the integer
                     if '0' <= expression[index + 1] <= '9':
-                        expression_data.append(int(expression[index] + expression[index + 1]))
-                        index += 2
+                        end = Evaluator.parse_numbers(expression, index + 1)
+                        expression_data.append(int(expression[index:end]))
+                        index = end
                     else:
                         expression_data.append(expression[index])
                         index += 1
                 # this adds suppport for - signed expression
                 case '-':
-                    # if the next character is a string representation of an integer than we assume this is a signed integer
+                    # if the next character is a string representation of an integer than we assume this is a signed integer and we parse to the end of the integer
                     if '0' <= expression[index + 1] <= '9':
-                        expression_data.append(int(expression[index] + expression[index + 1]))
-                        index += 2
+                        end = Evaluator.parse_numbers(expression, index + 1)
+                        expression_data.append(int(expression[index:end]))
+                        index = end
                     else:
                         expression_data.append(expression[index])
                         index += 1
-                # anything which != ('+', '-', ' ') is added
-                # if we have an integer as a string we first convert it to an int and then add it, else we add whatever else we have as it is
-                case _:
-                    expression_data.append(int(expression[index]) if '0' <= expression[index] <= '9' else expression[index])
+                case '/':
+                    expression_data.append(expression[index])
                     index += 1
+                case '*':
+                    expression_data.append(expression[index])
+                    index += 1
+                case '(':
+                    expression_data.append(expression[index])
+                    index += 1
+                case ')':
+                    expression_data.append(expression[index])
+                    index += 1
+                # if we have an integer as a string we first convert it to an int and then add it
+                case _:
+                    end = Evaluator.parse_numbers(expression, index + 1)
+                    expression_data.append(int(expression[index:end]))
+                    index = end
                     
         return expression_data
+
+    
+    @staticmethod
+    def parse_numbers(expression, index):
+        while index < len(expression) and '0' <= expression[index] <= '9':
+            index += 1
+        
+        return index
 
 
     @staticmethod
@@ -101,19 +117,19 @@ class Evaluator:
             
             if open_brackets > 0:
                 raise Exception
-        
-        # checks for the consecutive numbers, for example -> '4 + (12 / (1 * 2))' would return 4...though it should return None as 12 > 9 and only 0-9 signed decimals are allowed
-        def check_consecutive_number_case():
-            for index in range(len(expression)):
-                if '0' <= str(expression[index]) <= '9':
-                    if index + 1 < len(expression):
-                        if '0' <= str(expression[index + 1]) <= '9':
-                            raise Exception
-                        
 
         check_incorrect_operator_placement()
         check_for_opening_and_closing_brackets_equality()
-        check_consecutive_number_case()
+    
+    
+    @classmethod
+    def check_invalid_character_presence(cls, expression):
+        for character in expression:
+            if (character not in cls.operations and
+                character not in ('(', ')') and
+                not '0' <= character <= '9' and
+                character != ' '):
+                raise Exception
         
         
     @classmethod
@@ -143,6 +159,9 @@ class Evaluator:
             return None
 
         try:
+            # checking for the presence of invalid characters
+            cls.check_invalid_character_presence(expression)
+
             # converting the string expression to an array based on if a character != ' ' (we basically ignore all the whitespaces)
             expression = cls.get_parsed_expression(expression)
             

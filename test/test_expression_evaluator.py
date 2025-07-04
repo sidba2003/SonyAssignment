@@ -55,7 +55,7 @@ class TestExpressionEvaluator(unittest.TestCase):
     
     
     def test_invalidity_for_number_greater_than_9(self):
-        self.assertEqual(Evaluator.expression_evaluator('4 + (12 / (1 * 2))'), None)
+        self.assertEqual(Evaluator.expression_evaluator('4 + (12 / (1 * 2))'), 10)
     
     
     def test_division_by_zero(self):
@@ -80,3 +80,6 @@ class TestExpressionEvaluator(unittest.TestCase):
     
     def test_higher_closing_brackets_inequality(self):
         self.assertEqual(Evaluator.expression_evaluator('(1 + 10 )) + (12 * 2)'), None)
+    
+    def test_multi_digit_negative_number(self):
+        self.assertEqual(Evaluator.expression_evaluator('-12 * (-24 / 12)'), 24)
